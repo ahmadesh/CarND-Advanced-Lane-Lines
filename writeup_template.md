@@ -73,8 +73,8 @@ This resulted in the following source and destination points:
 |:-------------:|:-------------:| 
 | 575, 464      | 320, 0        | 
 | 707, 464      | 320, 720      |
-| 258, 682     | 960, 720      |
-| 1049, 682      | 960, 0        |
+| 258, 682      | 960, 720      |
+| 1049, 682     | 960, 0        |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
@@ -128,11 +128,17 @@ Finally, the the area between the detected lines is filled and unwarped on the o
 
 The processed video on the project video can be found here:
 
-[[Video]](https://youtu.be/GBQ0Vd_p52Y)
+[[Project video output]](https://github.com/ahmadesh/CarND-Advanced-Lane-Lines/blob/master/project_video_output.mp4)
 
 
 ### Discussion
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.
+One of the open ended challanges in this project is to define a good image thresholding. I tried different combinations of the color channels and gradients to find the best results. Howevere, my function is not robust enough for a good for all roads with varios conditions. This function is critical as all the other steps are dependet on this step.    
+
+The other challenge is the checks to accept or reject the detected lines. This is a also critical step as it determines the robustness of the code. I agian fine tuned the checks for the cases in the project video and the checks are not robust enough for other roads. 
+
+I processed the challenge video using my code as well. However, the code fails to detect the lines correctly for most parts. One reason was the extra lines on the roads or side of the roads which was dected as lane lines. Also, if an object such as bike enters the line area, the code fails to find the lines. 
+
+As the next steps I would work on better thresholding the image for differnet road conditions (sunny, cloudy, snowy etc.). The other modification is to use different thresholds for different parts of the warped image, as the lower part of the lines have better contrast and the upper part is more faded. The other approach is to implement a better checking and averaging procedure for the fitted lines. This could be done achived based on a fitting confidence measure and to weight the fittings based on their probabilty in averaging over consecutive frames.  
