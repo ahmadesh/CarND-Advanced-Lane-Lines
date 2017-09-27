@@ -56,10 +56,10 @@ I used a combination of HSL channels and x-gradient thresholds to generate a bin
 The code for my perspective transform includes a function called `warping()`, which appears in cell 6. Before defining the `warper()` function the (`src`) and destination (`dst`) points are defined.  I chose the hardcode the source and destination points in the following manner:
 
 ```python
-source = np.float32([(575,464),
-                  (707,464), 
-                  (258,682), 
-                  (1049,682)])
+source = np.float32([(576,465),
+                  (706,465), 
+                  (257,681), 
+                  (1050,681)])
 
 destination = np.float32([(450,0),
                   (img_size[0]-450,0),
@@ -70,10 +70,10 @@ This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 575, 464      | 450, 0        | 
-| 707, 464      | 830, 0      |
-| 258, 682      | 450, 720      |
-| 1049, 682     | 830, 720        |
+| 576, 465      | 450, 0        | 
+| 706, 465      | 830, 0      |
+| 257, 681      | 450, 720      |
+| 1050, 681     | 830, 720        |
 
 I verified that my perspective transform was working as expected by warping a test image that has straight line (`./test_images/straight_lines1.jpg`) to verify that the lines appear parallel in the warped image.
 
