@@ -128,7 +128,8 @@ Finally, the the area between the detected lines is filled and unwarped on the o
 
 The processed video on the project video can be found here:
 
-[![Watch the video](https://youtu.be/GBQ0Vd_p52Y)
+[![Watch the video](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://youtu.be/GBQ0Vd_p52Y)
+
 
 ### Discussion
 
