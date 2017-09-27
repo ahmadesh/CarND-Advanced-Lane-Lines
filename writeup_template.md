@@ -93,13 +93,13 @@ Here is the visualization of the sliding window method to find and fit to lines:
 
 <img src="./output_images/window.png" width="450" alt="Combined Image" />
 
-In case there is a fit from the previous frame. The other function that is `laneWithwindow()` is used to find and fit to the lines and can be found in cell 13. In this function the windows to search for the lines is approximated to be around the previous line. The hot points in the windows are found and a second order polynomials is fit to them. Here is a result of this function:
+In case there is a fit from the previous frame. The other function that is `laneWithwindow()` is used to find and fit to the lines and can be found in cell 13. In this function the windows to search for the lines is start around the previous line. Then, the hot points in the windows are found and a second order polynomials is fit to them. Here is a result of this function with the line fit:
 
 <img src="./output_images/previousFit.png" width="450" alt="Combined Image" />
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I implemented this step in cell 15 and in the function `curvature()`. The fit found for lines are the inputs and in the case of second order polynomials the curvature can be found using available equation. Also the offset of the veheicle from the center of the lines is calculated in this function. 
+I implemented this step in cell 15 and in the function `curvature()`. The line fit found for lines are the inputs and the curvature for second order polynomials is used as a function of the fit parameters. Also the offset of the veheicle from the center of the lines is calculated in this function. 
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
@@ -113,11 +113,11 @@ The plotting back function is implemented in `addDrawing()`. Here is an example 
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-The pipeline function for processing the video images is the 'imageProcess()' function. This function passes the image to binary thresholds and warpes the image to get the birds eye view. Then if there is a fit for the left and right lines, passes the image to the 'laneWithwindow()' function and otherwise the 'slidingWindow()' function that return the fittings to the left and right lines found. Then it checks to see if the difference between the x intercepts of the lines (bottom points) is within a range that is the width of the lane. 
+The pipeline function for processing the video images is the `imageProcess()` function in cell 20. This function passes the image to binary thresholds and warps the binary image to get the birds eye view. Then if there is a previous fit for the left and right lines, passes the image to the `laneWithwindow()` function and otherwise the `slidingWindow()` function that return the fittings to the left and right lines. Then it checks to see if the difference between the x intercepts of the lines (bottom points) is within a range that is the width of the lane. 
 
-Next, the dected fittings are passed to the 'update()' function of the line classes (defined in cell 20) to keep track of the calculated fittings. This function checks the difference between the current and previous fitting and rejects the fittings with too much variation. If the fitting passes the checks, it is added to the list of the passed 4 fittings and their average is stored as the best fit detected.
+Next, the dected fittings are passed to the `update()` function of the line classes (defined in cell 20) to keep track of the calculated fittings. This function checks the difference between the current and previous fitting and rejects the fittings with too much variation. If the fitting passes the checks, it is added to the list of the passed 4 fittings and their average is stored as the best fit detected.
 
-Finally, the the area between the detected lines is filled and unwarped on the original image using the 'addDrawing()' function. Also the curvature and offset are put as text on top of the image which produces the final image. I also added the binary image and the eye-birds view with the fitting lines to the side of the image. An example of the processed image is shown here:
+Finally, the area between the detected lines is filled and unwarped on the original image using the `addDrawing()` function. Also the curvature and offset are put as text on top of the image which produces the final image. I also added the binary image and the eye-birds view with the fitting lines to the side of the image for visualization. An example of the processed image is shown here:
 
 <img src="./output_images/output.png" width="600" alt="Combined Image" />
 
@@ -130,10 +130,10 @@ The processed video on the project video can be found here:
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-One of the open ended challanges in this project is to define a good image thresholding. I tried different combinations of the color channels and gradients to find the best results. Howevere, my function is not robust enough for a good for all roads with varios conditions. This function is critical as all the other steps are dependet on this step.    
+One of the open ended challanges in this project is to define a good image thresholding. I tried different combinations of the color channels and gradients to find the best results. Howevere, my function is not robust enough for all roads with varios conditions. This function is critical as all the other steps are dependent on the binary image.    
 
-The other challenge is the checks to accept or reject the detected lines. This is a also critical step as it determines the robustness of the code. I agian fine tuned the checks for the cases in the project video and the checks are not robust enough for other roads. 
+The other challenge is the checks to accept or reject the detected lines. This is a also critical step as it determines the robustness of the code. I agian fine tuned the checks for the cases in the project video but the current checks are not robust enough for other road conditions. 
 
-I processed the challenge video using my code as well. However, the code fails to detect the lines correctly for most parts. One reason was the extra lines on the roads or side of the roads which was dected as lane lines. Also, if an object such as bike enters the line area, the code fails to find the lines. 
+I processed the 'challenge video' using my code as well. However, the code fails to detect the lines correctly for most parts. One reason was the extra lines on the roads or side of the roads which were detected as lane lines. Also, if an object such as a bike enters the lane area, the code fails to find the correct lines as there are other hot pixels crossing the lines. 
 
-As the next steps I would work on better thresholding the image for differnet road conditions (sunny, cloudy, snowy etc.). The other modification is to use different thresholds for different parts of the warped image, as the lower part of the lines have better contrast and the upper part is more faded. The other approach is to implement a better checking and averaging procedure for the fitted lines. This could be achived based on a fitting confidence measure and to weight the fittings based on their probabilty in averaging over consecutive frames.
+As the next steps I would work on better thresholding the image for differnet road conditions (sunny, cloudy, snowy etc.). The modification could be to use different thresholds for different parts of the warped image, as the lower part of the lines have better contrast and the upper part is more faded. The other approach is to implement a better checking and averaging procedure for the fitted lines. This could be achieved based on a fitting confidence measure and to weight the fittings based on their confidence probabilty in averaging over consecutive frames.
