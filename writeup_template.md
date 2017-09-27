@@ -128,7 +128,7 @@ Finally, the the area between the detected lines is filled and unwarped on the o
 
 The processed video on the project video can be found here:
 
-[![Watch the video](http://youtu.be/vt5fpE0bzSY)
+[![Watch the video](https://youtu.be/GBQ0Vd_p52Y)
 
 ### Discussion
 
