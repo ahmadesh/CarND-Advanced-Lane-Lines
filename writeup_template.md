@@ -47,7 +47,7 @@ Using the camera distortion calibration parameters 'mtx' and 'dist', I use the '
 
 I used a combination of color and x-gradient thresholds to generate a binary image, which I embeded them in the Pipeline function at cell 7. The function takes the image, undistort it and converts it HSL. The threshold are appled to the S and L channels. Also the Sobel in x direction is used to threshold the image. Finally the combination of S & L or x-gradient thresholds are combined to build a binary output image. 
 
-Here's an example of my output for this step. 
+Here's an example of my output for this step: 
 
 <img src="./output_images/Threshold.png" width="600" alt="Combined Image" />
 
@@ -71,10 +71,10 @@ This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 575, 464      | 320, 0        | 
-| 707, 464      | 320, 720      |
-| 258, 682      | 960, 720      |
-| 1049, 682     | 960, 0        |
+| 575, 464      | 450, 0        | 
+| 707, 464      | 830, 0      |
+| 258, 682      | 450, 720      |
+| 1049, 682     | 830, 720        |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
@@ -94,23 +94,19 @@ Here is the visualization of the sliding window method to find and fit to lines:
 
 <img src="./output_images/window.png" width="600" alt="Combined Image" />
 
-In case there is a fir for the previous frame. The other function that is 'laneWithwindow()' is used to find and fit to the lines and can be found in cell 12. In this function the windows to search for the lines is approximated to be around the previous line. Therefore, the hot points in the windows are found and a second order polynomials is fit to them. Here is a result of this function:
+In case there is a fit from the previous frame. The other function that is 'laneWithwindow()' is used to find and fit to the lines and can be found in cell 12. In this function the windows to search for the lines is approximated to be around the previous line. Therefore, the hot points in the windows are found and a second order polynomials is fit to them. Here is a result of this function:
 
 <img src="./output_images/previousFit.png" width="600" alt="Combined Image" />
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+I implemented this step in cell 14 and in the function `curvature()`. The fit found for lines are the inputs and in the case of second order polynomials the curvature can be found using available equation. Also the offset of the veheicle from the center of the lines is calculated in this function. 
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in cell 14 and in the function `curvature()`. The fit found for lines are the inputs and in the case of second order polynomials the curvature can be found as:
+The plotting back function is implemented in `addDrawing()`. Here is an example of the image that is processed and the lane area is plotted back on the image:
 
-Also the offset of the veheicle from the center of the lines is calculated in this function. 
-
-Here is an example of my result on a test image with the calculated radius of curvature and the offset from center:
-
-<img src="./output_images/previousFit.png" width="600" alt="Combined Image" />
+<img src="./output_images/drawn.png" width="600" alt="Combined Image" />
 
 ---
 
@@ -141,4 +137,4 @@ The other challenge is the checks to accept or reject the detected lines. This i
 
 I processed the challenge video using my code as well. However, the code fails to detect the lines correctly for most parts. One reason was the extra lines on the roads or side of the roads which was dected as lane lines. Also, if an object such as bike enters the line area, the code fails to find the lines. 
 
-As the next steps I would work on better thresholding the image for differnet road conditions (sunny, cloudy, snowy etc.). The other modification is to use different thresholds for different parts of the warped image, as the lower part of the lines have better contrast and the upper part is more faded. The other approach is to implement a better checking and averaging procedure for the fitted lines. This could be achived based on a fitting confidence measure and to weight the fittings based on their probabilty in averaging over consecutive frames.  
+As the next steps I would work on better thresholding the image for differnet road conditions (sunny, cloudy, snowy etc.). The other modification is to use different thresholds for different parts of the warped image, as the lower part of the lines have better contrast and the upper part is more faded. The other approach is to implement a better checking and averaging procedure for the fitted lines. This could be achived based on a fitting confidence measure and to weight the fittings based on their probabilty in averaging over consecutive frames.
