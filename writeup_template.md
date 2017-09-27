@@ -84,11 +84,19 @@ I verified that my perspective transform was working as expected by drawing the 
 
 Then I fit my lane lines with a 2nd order polynomial. This devides into two cases. The first case is when there is not approximation for the lane lines that is in the function 'slidingWindow()' in the cell 10. This function, takes a binary image, and does the following steps:
 
-1- Caluclates the histogram of the bottom half of the image and detects two peaks associating with the approximate line locations. 
+- Caluclates the histogram of the bottom half of the image and detects two peaks associating with the approximate lines at the bottom of the image. 
 
-2- Then in slides a window in each row and detects the window with the maximum number of ON points. This gives the windows that contain the 
+- Then a sliding window starts from the detected locations and finds the indices of the hot pixels and slides to the top of the image. 
 
-![alt text][image5]
+- Finally, a second order pollynomial is fit to the points found for the lines. 
+
+Here is the visualization of the sliding window method to find and fit to lines:
+
+<img src="./output_images/window.png" width="600" alt="Combined Image" />
+
+In case there is a fir for the previous frame. The other function that is 'laneWithwindow()' is used to find and fit to the lines and can be found in cell 12. In this function the windows to search for the lines is approximated to be around the previous line. Therefore, the hot points in the windows are found and a second order polynomials is fit to them. Here is a result of this function:
+
+<img src="./output_images/previousFit.png" width="600" alt="Combined Image" />
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
@@ -96,15 +104,21 @@ I did this in lines # through # in my code in `my_other_file.py`
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this step in cell 14 and in the function `curvature()`. The fit found for lines are the inputs and in the case of second order polynomials the curvature can be found as:
 
-![alt text][image6]
+Also the offset of the veheicle from the center of the lines is calculated in this function. 
+
+Here is an example of my result on a test image with the calculated radius of curvature and the offset from center:
+
+<img src="./output_images/previousFit.png" width="600" alt="Combined Image" />
 
 ---
 
 ### Pipeline (video)
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+
+
 
 Here's a [link to my video result](./project_video.mp4)
 
