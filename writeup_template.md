@@ -1,4 +1,4 @@
-**Advanced Lane Finding Project**
+# Advanced Lane Finding Project
 
 The goals / steps of this project are the following:
 
@@ -25,11 +25,13 @@ The goals / steps of this project are the following:
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the cell 2 to 4 of the IPython notebook located in [Project file](https://github.com/ahmadesh/CarND-Advanced-Lane-Lines/blob/master/Project.ipynb).  
+The code for this step is contained in the cells 2 to 4 of the IPython notebook located in [Project file](https://github.com/ahmadesh/CarND-Advanced-Lane-Lines/blob/master/Project.ipynb).  
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection in the `cv2.findChessboardCorners()` function. Here are the corners detected on the calibration images:
 
 <img src="./output_images/Calibration_dots.png" width="600" alt="Combined Image" />
+
+The images that are not plotted don't have the 9x6 cells and are ignored. 
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
 
@@ -39,7 +41,7 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 #### 1. Provide an example of a distortion-corrected image.
 
-Using the camera distortion calibration parameters 'mtx' and 'dist', I use the 'cv2.undistort()' function to undistort the images as shown here:
+Using the camera distortion calibration parameters `mtx` and `dist`, I use the `cv2.undistort()` function to undistort the images as shown here:
 
 <img src="./output_images/Undistort.png" width="600" alt="Combined Image" />
 
