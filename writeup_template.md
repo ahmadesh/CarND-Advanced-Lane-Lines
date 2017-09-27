@@ -47,9 +47,7 @@ Using the camera distortion calibration parameters `mtx` and `dist`, I use the `
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and x-gradient thresholds to generate a binary image, which I embeded them in the Pipeline function at cell 8. The function takes the image, undistort it and converts it HSL. The threshold are appled to the S and L channels. Also the Sobel in x direction is used to threshold the image. Finally the combination of S & L or x-gradient thresholds are combined to build a binary output image. 
-
-Here's an example of my output for this step: 
+I used a combination of HSL channels and x-gradient thresholds to generate a binary image, which I embeded them in the `Pipeline` function at cell 8. The function takes the image, undistort it and converts it HSL. The thresholds are appled to the S and L channels. Also the Sobel in x direction is used to threshold the image. Finally the combination of S & L or x-gradient thresholds are combined to build a binary output image. Here's an example of my output for this step: 
 
 <img src="./output_images/Threshold.png" width="600" alt="Combined Image" />
 
@@ -77,25 +75,25 @@ This resulted in the following source and destination points:
 | 258, 682      | 450, 720      |
 | 1049, 682     | 830, 720        |
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
+I verified that my perspective transform was working as expected by warping a test image that has straight line (`./test_images/straight_lines1.jpg`) to verify that the lines appear parallel in the warped image.
 
 <img src="./output_images/warping.png" width="600" alt="Combined Image" />
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I fit my lane lines with a 2nd order polynomial. This devides into two cases. The first case is when there is not approximation for the lane lines that is in the function `slidingWindow()` in the cell 10, 11. This function, takes a binary image, and does the following steps:
+Then I fit my lane lines with a 2nd order polynomial. This devides into two cases. The first case is when there is no approximation for the lane lines that is in the function `slidingWindow()` in the cell 10, 11. This function, takes a binary image, and does the following steps:
 
 - Caluclates the histogram of the bottom half of the image and detects two peaks associating with the approximate lines at the bottom of the image. 
 
 - Then a sliding window starts from the detected locations and finds the indices of the hot pixels and slides to the top of the image. 
 
-- Finally, a second order pollynomial is fit to the points found for the lines. 
+- Finally, a second order polynomial is fit to the points found for the lines. 
 
 Here is the visualization of the sliding window method to find and fit to lines:
 
 <img src="./output_images/window.png" width="450" alt="Combined Image" />
 
-In case there is a fit from the previous frame. The other function that is 'laneWithwindow()' is used to find and fit to the lines and can be found in cell 13. In this function the windows to search for the lines is approximated to be around the previous line. Therefore, the hot points in the windows are found and a second order polynomials is fit to them. Here is a result of this function:
+In case there is a fit from the previous frame. The other function that is `laneWithwindow()` is used to find and fit to the lines and can be found in cell 13. In this function the windows to search for the lines is approximated to be around the previous line. The hot points in the windows are found and a second order polynomials is fit to them. Here is a result of this function:
 
 <img src="./output_images/previousFit.png" width="450" alt="Combined Image" />
 
