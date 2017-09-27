@@ -29,58 +29,64 @@ The code for this step is contained in the second and third code cell of the IPy
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection in the `cv2.findChessboardCorners()` function. Here are the corners detected on the calibration images:
 
-<img src="./output_images/Calibration_dots.png" width="480" alt="Combined Image" />
+<img src="./output_images/Calibration_dots.png" width="600" alt="Combined Image" />
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
 
-![alt text][image1]
+<img src="./output_images/Calibration.png" width="600" alt="Combined Image" />
 
 ### Pipeline (single images)
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![alt text][image2]
+Using the camera distortion calibration parameters 'mtx' and 'dist', I use the 'cv2.undistort()' function to undistort the images as shown here:
+
+<img src="./output_images/Undistort.png" width="600" alt="Combined Image" />
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+I used a combination of color and x-gradient thresholds to generate a binary image, which I embeded them in the Pipeline function at cell 7. The function takes the image, undistort it and converts it HSL. The threshold are appled to the S and L channels. Also the Sobel in x direction is used to threshold the image. Finally the combination of S & L or x-gradient thresholds are combined to build a binary output image. 
 
-![alt text][image3]
+Here's an example of my output for this step. 
+
+<img src="./output_images/Threshold.png" width="600" alt="Combined Image" />
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The code for my perspective transform includes a function called `warping()`, which appears in cell 5.  Before defining the `warper()` function the (`src`) and destination (`dst`) points are defined.  I chose the hardcode the source and destination points in the following manner:
 
 ```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+source = np.float32([(575,464),
+                  (707,464), 
+                  (258,682), 
+                  (1049,682)])
+
+destination = np.float32([(450,0),
+                  (img_size[0]-450,0),
+                  (450,img_size[1]),
+                  (img_size[0]-450,img_size[1])])
 ```
 
 This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+| 575, 464      | 320, 0        | 
+| 707, 464      | 320, 720      |
+| 258, 682     | 960, 720      |
+| 1049, 682      | 960, 0        |
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![alt text][image4]
+<img src="./output_images/warping.png" width="600" alt="Combined Image" />
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Then I fit my lane lines with a 2nd order polynomial. This devides into two cases. The first case is when there is not approximation for the lane lines that is in the function 'slidingWindow()' in the cell 10. This function, takes a binary image, and does the following steps:
+
+1- Caluclates the histogram of the bottom half of the image and detects two peaks associating with the approximate line locations. 
+
+2- Then in slides a window in each row and detects the window with the maximum number of ON points. This gives the windows that contain the 
 
 ![alt text][image5]
 
